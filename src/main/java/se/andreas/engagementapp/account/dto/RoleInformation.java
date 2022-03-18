@@ -1,20 +1,14 @@
 package se.andreas.engagementapp.account.dto;
 
+import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbVisibility;
 import se.andreas.engagementapp.account.model.FieldVisibilityStrategy;
 
 @JsonbVisibility(FieldVisibilityStrategy.class)
-public final class RoleInformation implements BusinessObject {
+public record RoleInformation(String name, Role role) implements BusinessObject {
 
-    private String name;
-    private Role role;
-
-    public String getName() {
-        return name;
-    }
-
-    public Role getRole() {
-        return role;
+    @JsonbCreator
+    public RoleInformation {
     }
 
     public enum Role {

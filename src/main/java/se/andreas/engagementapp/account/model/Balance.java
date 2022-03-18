@@ -5,13 +5,6 @@ import jakarta.json.bind.annotation.JsonbVisibility;
 import java.math.BigDecimal;
 
 @JsonbVisibility(FieldVisibilityStrategy.class)
-public class Balance {
+public record Balance(BigDecimal balance, String currency) {
 
-    private final BigDecimal balance;
-    private final String currency;
-
-    public Balance(BigDecimal balance, String currency) {
-        this.balance = balance;
-        this.currency = currency;
-    }
 }

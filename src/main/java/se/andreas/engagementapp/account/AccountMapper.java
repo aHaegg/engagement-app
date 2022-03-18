@@ -17,25 +17,23 @@ import static se.andreas.engagementapp.account.dto.RoleInformation.Role.OWNER;
 public class AccountMapper {
 
     public Account map(se.andreas.engagementapp.account.dto.Account dtoAccount) {
-        Account account = new Account(dtoAccount.getName());
+        Account account = new Account(dtoAccount.name());
 
-        for (BusinessObject businessObject : dtoAccount.getBusinessObjects()) {
-            if(businessObject instanceof RoleInformation) {
-                RoleInformation a = (RoleInformation) businessObject;
-                if(a.getRole() == OWNER) {
-                    account.setOwnerName(a.getName());
+        for (BusinessObject businessObject : dtoAccount.businessObjects()) {
+            if(businessObject instanceof RoleInformation a) {
+                if(a.role() == OWNER) {
+                    account.setOwnerName(a.name());
                 } else {
-                    AccountRole accountRole = new AccountRole(a.getName(), Role.map(a.getRole().name()));
+                    AccountRole accountRole = new AccountRole(a.name(), Role.map(a.role().name()));
                     account.getAccountRoles().add(accountRole);
                 }
 
-            } else if(businessObject instanceof StatusInformation) {
-                account.setStatus(StatusType.map(((StatusInformation) businessObject).getStatus().name()));
+            } else if(businessObject instanceof StatusInformation s) {
+                account.setStatus(StatusType.map(s.status().name()));
 
-            } else if(businessObject instanceof BalanceInformation) {
-                BalanceInformation balanceInformation = (BalanceInformation) businessObject;
-                account.setBalance(new Balance(balanceInformation.getBalance(), balanceInformation.getCurrency()));
-                account.setInterest(balanceInformation.getInterest());
+            } else if(businessObject instanceof BalanceInformation b) {
+                account.setBalance(new Balance(b.balance(), b.currency()));
+                account.setInterest(b.interest());
 
             } else {
                 throw new RuntimeException("This should never happen");

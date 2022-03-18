@@ -1,15 +1,14 @@
 package se.andreas.engagementapp.account.dto;
 
+import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbVisibility;
 import se.andreas.engagementapp.account.model.FieldVisibilityStrategy;
 
 @JsonbVisibility(FieldVisibilityStrategy.class)
-public final class StatusInformation implements BusinessObject {
+public record StatusInformation(Status status) implements BusinessObject {
 
-    private Status status;
-
-    public Status getStatus() {
-        return status;
+    @JsonbCreator
+    public StatusInformation {
     }
 
     public enum Status {
