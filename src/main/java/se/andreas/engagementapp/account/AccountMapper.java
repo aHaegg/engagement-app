@@ -20,23 +20,15 @@ public class AccountMapper {
         Account account = new Account(dtoAccount.name());
 
         for (BusinessObject businessObject : dtoAccount.businessObjects()) {
-            if(businessObject instanceof RoleInformation a) {
-                if(a.role() == OWNER) {
-                    account.setOwnerName(a.name());
-                } else {
-                    AccountRole accountRole = new AccountRole(a.name(), Role.map(a.role().name()));
-                    account.getAccountRoles().add(accountRole);
+            switch (businessObject) {
+                case RoleInformation a && a.role() == OWNER -> account.setOwnerName(a.name());
+                case RoleInformation a -> account.getAccountRoles().add(new AccountRole(a.name(), Role.map(a.role().name())));
+                case StatusInformation s -> account.setStatus(StatusType.map(s.status().name()));
+                case BalanceInformation b -> {
+                    account.setBalance(new Balance(b.balance(), b.currency()));
+                    account.setInterest(b.interest());
                 }
-
-            } else if(businessObject instanceof StatusInformation s) {
-                account.setStatus(StatusType.map(s.status().name()));
-
-            } else if(businessObject instanceof BalanceInformation b) {
-                account.setBalance(new Balance(b.balance(), b.currency()));
-                account.setInterest(b.interest());
-
-            } else {
-                throw new RuntimeException("This should never happen");
+                case null -> {} // Do nothing
             }
         }
 
